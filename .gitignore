@@ -1,0 +1,7 @@
+# dev environment
+compile_flags.txt
+
+# build - target
+build/
+*.z64
+
