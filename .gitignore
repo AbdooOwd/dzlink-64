@@ -5,3 +5,5 @@ compile_flags.txt
 build/
 *.z64
 
+# N64 Asset Conversions
+filesystem/
