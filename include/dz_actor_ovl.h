@@ -2,7 +2,7 @@
 #define ACTOR_OVERLAY_H
 
 #include "dz_actor.h"
-#include "types.h"
+#include <lib/types.h>
 
 typedef struct ActorOverlay {
   ActorProfile* profile;

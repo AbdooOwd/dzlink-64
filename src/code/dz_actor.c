@@ -21,7 +21,7 @@ Actor* Actor_Spawn(ActorContext* actorCtx, ActorID actor_id, float pos[3], float
 
   Actor* newActor = malloc_uncached(profile->instance_size);
 
-  assertf(newActor != NULL, "Couldn't allocate for new actor of size: %li", profile->instance_size);
+  assertf(newActor != NULL, "Couldn't allocate for new actor %i of size: %li", actor_id, profile->instance_size);
 
   overlayEntry->numLoaded++; // anouther actor instance was loaded
 

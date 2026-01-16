@@ -1,13 +1,14 @@
 #include <globals.h>
 #include <stdbool.h>
-#include <types.h>
+#include <lib/types.h>
 #include "asset.h"
-#include "console.h"
+#include "controller.h"
 #include "display.h"
 #include "dragonfs.h"
 #include "dz_actor.h"
 #include "fonts.h"
 #include "graphics.h"
+#include "joypad.h"
 #include "n64sys.h"
 #include "rdpq.h"
 #include "rdpq_attach.h"
@@ -18,14 +19,11 @@
 #include <t3d/t3dmodel.h>
 #include <libdragon.h>
 
+void main_init();
+void main_destroy();
+
 int main() {
-  // some of our assets use level 2 compression
-  asset_init_compression(2);
-  dfs_init(DFS_DEFAULT_LOCATION);
-  display_init(RESOLUTION_320x240, DEPTH_16_BPP, FB_COUNT, GAMMA_NONE, FILTERS_RESAMPLE);
-  rdpq_init();
-  t3d_init((T3DInitParams) {});
-  joypad_init();
+  main_init();
 
   // setting up the camera
   T3DViewport viewport = t3d_viewport_create_buffered(FB_COUNT);
@@ -64,16 +62,31 @@ int main() {
     t3d_light_set_count(1);
 
     Actor_UpdateAll(actorCtx);
-    rdpq_text_printf(NULL, FONTID_LEXIS, 10.0f, 10.0f, "HEAP_START: %p", HEAP_START_ADDR);
+    rdpq_text_printf(NULL, FONTID_LEXIS, 10.0f, 10.0f,
+                     "FPS: %.02f\nHEAP_START: %p", display_get_fps(), HEAP_START_ADDR);
 
     rdpq_detach_show();
   }
 
-  console_close();
+  main_destroy();
+
+  return 0;
+}
+
+void main_init() {
+  // some of our assets use level 2 compression
+  asset_init_compression(2);
+  dfs_init(DFS_DEFAULT_LOCATION);
+  display_init(RESOLUTION_320x240, DEPTH_16_BPP, FB_COUNT, GAMMA_NONE, FILTERS_RESAMPLE);
+  rdpq_init();
+  t3d_init((T3DInitParams) {});
+  joypad_init();
+}
+
+void main_destroy() {
+  joypad_close();
   t3d_destroy();
   rdpq_close();
   display_close();
   dfs_close(DFS_DEFAULT_LOCATION);
-
-  return 0;
 }

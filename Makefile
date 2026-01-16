@@ -22,7 +22,7 @@ include $(N64_INST)/include/n64.mk
 include $(N64_INST)/include/t3d.mk
 
 # flags
-N64_C_AND_CXX_FLAGS += -Iinclude
+N64_C_AND_CXX_FLAGS += -Iinclude -DLIBDRAGON_FAST_MATH
 N64_RESOLUTION = 320x240
 
 

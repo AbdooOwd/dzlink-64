@@ -2,7 +2,7 @@
 #define ACTOR_H
 
 #include <t3d/t3dmath.h>
-#include <types.h>
+#include <lib/types.h>
 
 struct Actor;
 struct ActorOverlay;
