@@ -1,7 +1,9 @@
 #include "dz_obj_n64_logo.h"
-#include "dz_actor.h"
-#include "globals.h"
+#include <dz_actor.h>
+#include <globals.h>
 #include "joypad.h"
+#include <lib/types.h>
+#include <lib/dzmath.h>
 #include "n64sys.h"
 #include "t3d/t3dmath.h"
 #include <t3d/t3dmodel.h>
@@ -18,6 +20,7 @@ float model_scale[3] = {0.1f, 0.1f, 0.1f};
 float model_position[3] = {0.0f, 0.0f, 0.0f};
 float model_rotation[3] = {0.0f, 0.0f, 0.0f};
 
+// @TODO: must replace this with the state's frames
 static u8 frameIdx = 0;
 
 ActorProfile ObjN64Logo_Profile = {
@@ -37,6 +40,8 @@ void ObjN64Logo_Init(Actor* thisx) {
   n64_model = t3d_model_load(N64_MODEL_FILENAME);
 }
 
+static binang bob = 0;
+
 void ObjN64Logo_Update(Actor* thisx) {
   ObjN64Logo* this = (ObjN64Logo*) thisx;
   int input_axis[2] = { // TODO: must replace this later with playState's global input
@@ -48,6 +53,8 @@ void ObjN64Logo_Update(Actor* thisx) {
   model_position[2] += input_axis[1] * -0.5f;
 
   frameIdx = (frameIdx + 1) % FB_COUNT;
+  bob += 512;
+  model_position[1] = dz_sin(bob) * 2.0f;
   model_rotation[1] += 0.02f;
   t3d_mat4fp_from_srt_euler(&this->mat4fp[frameIdx], model_scale, model_rotation, model_position);
 }
@@ -61,7 +68,6 @@ void ObjN64Logo_Draw(Actor* thisx) {
       t3d_matrix_pop(1);
       this->dplDraw = rspq_block_end();
     }
-
     t3d_matrix_push(&this->mat4fp[frameIdx]);
     rspq_block_run(this->dplDraw);
 }
