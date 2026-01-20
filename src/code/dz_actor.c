@@ -15,7 +15,7 @@ ActorContext* ActorContext_Init() {
 
   // we start at the first actor entry, also avoiding
   // the "none" actor ID
-  ActorOverlay* overlayEntry = &gActorOverlayTable[1];
+  ActorOverlay* overlayEntry = &gActorOverlayTable[0];
 
   // iterate to set their numLoaded to 0, because it's a new context
   for (u8 i = 0; i < ARRAY_COUNT(gActorOverlayTable); i++) {

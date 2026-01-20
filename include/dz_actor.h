@@ -44,8 +44,9 @@ typedef struct ActorContext {
 #define DEFINE_ACTOR(_0, _1, actor_enum_value) actor_enum_value,
 
 typedef enum ActorID {
-  ACTOR_ID_NONE,
   #include <tables/actor_table.h>
+
+  // @NOTE: can be used as a none value for actor IDs I guess?
   ACTOR_ID_MAX
 } ActorID;
 
