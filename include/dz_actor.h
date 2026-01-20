@@ -13,6 +13,8 @@ typedef struct Actor {
   u16 id; // Actor's type, techincally. usually a value of ActorID enum
   PosRot home; // posrot when actor was spawned
   PosRot world; // current posrot in the world
+  u16 params;
+
   struct Actor* prev;
   struct Actor* next;
   struct ActorOverlay* overlayEntry; // local pointer to actor's overlay entry
@@ -42,6 +44,7 @@ typedef struct ActorContext {
 #define DEFINE_ACTOR(_0, _1, actor_enum_value) actor_enum_value,
 
 typedef enum ActorID {
+  ACTOR_ID_NONE,
   #include <tables/actor_table.h>
   ACTOR_ID_MAX
 } ActorID;
@@ -50,6 +53,7 @@ typedef enum ActorID {
 
 
 void Actor_Init(Actor* actor);
+void ActorContext_Destroy(ActorContext* actorCtx);
 Actor* Actor_Spawn(ActorContext* actorCtx, ActorID actor_id, float pos[3], float rot[3]);
 ActorContext* ActorContext_Init();
 void Actor_UpdateAll(ActorContext* actorCtx);

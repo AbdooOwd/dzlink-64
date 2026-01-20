@@ -1,7 +1,7 @@
 #include "dz_actor_ovl.h"
-#include "joypad.h"
 #include "n64sys.h"
 #include <dz_actor.h>
+#include <lib/utils.h>
 
 void Actor_Init(Actor* actor) {
   if (actor->init != NULL) {
@@ -12,7 +12,28 @@ void Actor_Init(Actor* actor) {
 
 ActorContext* ActorContext_Init() {
   ActorContext* actorCtx = malloc_uncached(sizeof(ActorContext));
+
+  // we start at the first actor entry, also avoiding
+  // the "none" actor ID
+  ActorOverlay* overlayEntry = &gActorOverlayTable[1];
+
+  // iterate to set their numLoaded to 0, because it's a new context
+  for (u8 i = 0; i < ARRAY_COUNT(gActorOverlayTable); i++) {
+    overlayEntry->numLoaded = 0;
+    overlayEntry++; // NEXT ENTRY PLEASE!
+  }
+
   return actorCtx;
+}
+
+void ActorContext_Destroy(ActorContext* actorCtx) {
+  // @TODO: don't know if this works :shrugging_person:
+  Actor* nextActor;
+  for (u16 i = 0; i < actorCtx->total; i++) {
+    nextActor = actorCtx->actorHead->next;
+    free_uncached(actorCtx->actorHead);
+    actorCtx->actorHead = nextActor;
+  }
 }
 
 Actor* Actor_Spawn(ActorContext* actorCtx, ActorID actor_id, float pos[3], float rot[3]) {
@@ -60,6 +81,4 @@ void Actor_UpdateAll(ActorContext* actorCtx) {
     actor->draw(actor);
     actor = actor->next;
   }
-
-  joypad_poll();
 }
