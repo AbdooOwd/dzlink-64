@@ -1,4 +1,11 @@
-# Todos
+# Thoughts
+
+Welcome to this unorganized "entries-based" "devlog". Really, it's just a place
+where I throw my thoughts while I'm developing this project. This documents also
+contains some pretty interesting stuff for N64 & average devs (i think).
+
+> NOTE: this document started as a todo list. So you'll notice in the first
+  entries tasks instead of thoughts and notes.
 
 - [DONE] Implement an actor system (heavily inspired from HackerOoT)
 - Learn how to display a 3D plane with Tiny3D
@@ -141,9 +148,10 @@
     - 0xC000 = 270° (49152/65536 × 360° = 270°)
     - 0xFFFF = 359° (360° is 0°)
 
-  - What I have understood about how BINANG is written, is that for `0xP000`
-    `P` is how many eighths (1/8) of a circle the angles represents.
-    For example, knowing that 1/8 of a circle in degrees is 45°, `0x1000`
+  - [WARNING: this part is wrong ]
+    What I have understood about how BINANG is written, is that for `0xP000`
+    `P` is how many twelveth (1/12) of a circle the angles represents.
+    For example, knowing that 1/12 of a circle in degrees is 45°, `0x1000`
     means 45°. `0x3000` means 135° (45 * 3).
     But that's for a global idea by rounding to 1/8 of a circle.
 
@@ -176,4 +184,78 @@
     Because if the highest bit is 0, then it means that `cos(angle) > 0` (positive).
     But if the highest bit is 1, then `cos(angle) < 0`. Because a bit of 0 means
     means we're on the right quadrants, and a bit of 1 means we're on
-    the left quadrants.
+    the left quadrants. 
+
+  - So, what was supposed to be a simple implementation of that Indian's formula
+    is a bit of a brain-ache. Soooo, I think I'll focus on the game-states for now.
+
+- It really pains me to say this, but I'll have to stick with ZeldaOoT's approach
+  at working with game-states...
+  I tried implementing my own thing. But after finding out that a game-state overlay table
+  that consists of, let's say, 5 states would be around 145 bytes, it felt like I was just
+  begging for bytes (you know that meme of Squidward begging for pennies?).
+  - The issue I encountered is that I had to know what size & what life functions had to be
+    used to allocate for a new state and start working with it.
+    I could do this with a few functions, but I would need:
+    a function to set the next game-state's life functions based on a game-state ID,
+    and a function to get the size of a game-state based on its ID.
+  - Wait... That's it? I technically just need these 2 functions! And on top of that,
+    loading a new game-state can't be annoying because it would probably display
+    a loading screen or something (the player will wait for another state to load like
+    he knows is done in any other game). So I save up around 87 bytes which could have
+    been used for an overlay table for 3 game states.
+  - So, TL;DR: I have the choice between keeping a game-state overlay table in memory,
+    or just loading the game-state on-the-go when a state-switch or new state is requested
+    which saves some memory but adds more code.
+
+- Alright, back to Bhaskara I's approximation of cosine: I IMPLEMENTED IT!
+  LIKE: IT WORKS! FOR REAL!
+  * "Is it correct?""
+    <br/> I don't know...
+  * "Is it fast?""
+    <br/> Probably???
+
+  But I heard it's fast so... Oh! And using Bhaskara's I cosine approximation,
+  I can calculate sine by doing:
+  ```
+  sqrt(1 - cos(x)²) = sin(x)
+  ```
+  So that's a win. Because apparently, a square-root on the N64 is as expensive
+  as a division, so that's cool.
+
+- Now, I have to explain how things are done:
+  using this code snippet from Kaze Emanuar:
+
+  <img src="./imgs/kaze_bhaskaraCos.png" />
+
+  We have little background about what's happening in this code-snippet,
+  but there are things you can understand with my previous thoughts-entries.
+  And note that I have modified a few things in there to boost performance
+  and because there are some stuff that Kaze has done that are specific
+  to his code-based and... "coding-ethics"...
+
+  * So, the `flipsign` has already been explained.
+  * `angle = 0x8000 - angle` so if we're working on the left half of the *(imaginary)*
+    circle, it is translated to the right circle, because the formula used (Bhaskara I)
+    [TODO: continue the explanation]
+
+- I have just finished my own game-state system. It has a bunch of concepts inspired
+  by ZeldaOoT's game-state system, but what I did on my own is how states
+  are managed and how to switch/change states.
+  It's like 10:30PM, I am tired, so I might explain this tomorrow.
+  It's, uhh, the 20th of January 2026. This is a nice date. I have an N64 game
+  running my own actor & game-state system, with a lot of "from-scratch" things in it.
+  I'm also pretty proud with my super-fast cosine & sine functions.
+  > I am worried I will forget how all of this state-thingy-system works tomorrow.
+    But it is fairly easy to understand for now.
+
+- I just had a thought while checking my actor handling codes: we can initialize
+  a new `ActorContext` with `ActorContext_Init`. But can we destroy it?
+  Do I currently have a way to free all actors? Uh oh... Memory leaks...!
+  - Alright I tried coding something simple that iterates over the actors
+    in the actors' chain and free them. I don't know if it actually works,
+    but I'm pretty tired as I said. Game-state system done, actor system too I guess,
+    and this `ActorContext_Destroy` should be a-ok based on this little doodle
+    I did that cannot be understood neither by you nor me tomorrow, I'm sure.
+
+    <img src="./imgs/10pm_actorCtx_destroy.png" />
