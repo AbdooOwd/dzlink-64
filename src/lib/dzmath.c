@@ -21,6 +21,6 @@ float dz_cos(binang angle) {
   return flipsign ? -cosine : cosine;
 }
 
-float dz_sin(s16 angle) {
+float dz_sin(binang angle) {
   return dz_cos(angle - Q15_PI_HALF);
 }
