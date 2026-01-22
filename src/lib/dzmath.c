@@ -1,4 +1,5 @@
 #include <lib/dzmath.h>
+#include <math.h>
 
 /*
  *  By the Indian mathematician Bhaskara I
@@ -23,4 +24,14 @@ float dz_cos(binang angle) {
 
 float dz_sin(binang angle) {
   return dz_cos(angle - Q15_PI_HALF);
+}
+
+float dz_tan(binang angle) {
+  float c = cos(angle);
+  if (c <= 0.0000000000000001f)
+    c = 0.0000000000000001f;
+
+  float tan = (dz_sin(angle)) / c;
+
+  return tan;
 }

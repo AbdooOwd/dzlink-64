@@ -12,7 +12,28 @@
 #define Q15_PI_SQR  0x40000000
 #define Q15_PI_HALF 0x4000
 
-float dz_cos(s16 angle);
-float dz_sin(s16 angle);
+
+#define VEC3_ZERO (Vec3){{0, 0, 0}}
+#define VEC3(x, y, z) (Vec3){{x, y, z}}
+
+
+#define BINANG_PER_DEG  182.0444444444444444f
+#define BINANG_PER_RAD  10430.3783504704527246f
+#define RAD_PER_DEG     0.0174532925199432f
+
+// TRUNCF_BINANG stolen from ZeldaOoT (:<
+#define TRUNCF_BINANG(f)  (binang)(s32)(f)
+
+#define DEG_TO_RAD(deg) ((deg) * RAD_PER_DEG)
+#define DEG_TO_BINANG(deg) TRUNCF_BINANG((deg) * BINANG_PER_DEG)
+#define RAD_TO_DEG(rad) ((rad) / RAD_PER_DEG)
+#define RAD_TO_BINANG(rad)  TRUNCF_BINANG((rad) * BINANG_PER_RAD)
+#define BINANG_TO_DEG(binangle) ((binangle) / BINANG_PER_DEG)
+#define BINANG_TO_RAD(binangle) ((binangle) / BINANG_PER_RAD)
+
+
+float dz_cos(binang angle);
+float dz_sin(binang angle);
+float dz_tan(binang angle);
 
 #endif
