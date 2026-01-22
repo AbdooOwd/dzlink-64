@@ -259,3 +259,40 @@ contains some pretty interesting stuff for N64 & average devs (i think).
     I did that cannot be understood neither by you nor me tomorrow, I'm sure.
 
     <img src="./imgs/10pm_actorCtx_destroy.png" />
+
+- Alright, we're yesterday's tomorrow now, and I must explain how my game-state
+  system works. But I am also tired right now (it's exactly 19:44).
+  But I'll a brief explanation:
+  - We declare a global "master state" called `gMasterState` which is like a big-boss
+    that decides the fate of the state-system.
+    [TODO: continue]
+
+- Alright, I'm lazing off about explaining my code, but right now I have a slightly
+  bigger issue: my cosine & sine functions use BINANGs. But my `PosRot` type uses... idk.
+  Like, what does Tiny3D even use to represent rotations? What unit?
+  But anyways: the problem is exactly that! There isn't a universal rotation/angle unit
+  in my code-base! Will I have to keep converting stuff to stuff? Nuh uh!
+  I gotta find a solution...
+
+- Ah, also: I implemented a Play State and a Camera. But I just realized that my camera
+  can't use the `rot` from its `PosRot` because the camera's rotation is calculated
+  using its `at` coordinates. So I don't know if I should get rid of the `PosRot`
+  and just add the camera's position with a `Vec3`, or implement something
+  to apply the rotation we give to the camera. Either way, it's 23:31 and yes:
+  I am kinda tired.
+
+- Little reminder to myself to explain the following things:
+  * The Game-State System
+  * The Camera
+  * My Cosine & Sine functions
+  * Write a more thorough explanation of the Actor System.
+
+- I should start trying to replace Tiny3D's stuff that use floats with BINANGS.
+  Or at least minimize the use of floats for my rotations.
+
+- I should also start classifying what's in this document into other more
+  detailed documents. And mark the notes here in, well, [notes](./notes.md).
+
+- Imagine fighting your camera's code because your view or actors are appearing
+  all squished, until you realize your emulator was in 16:9 ... Welp.
+  Just had to set it back to 4:3 !

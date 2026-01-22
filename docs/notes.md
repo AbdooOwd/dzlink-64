@@ -6,6 +6,8 @@
   I don't think that I'll need more that 255 actors. In the future,
   if I ever plan on passing that count, I should switch from a `u8`
   so something more appropriate.
+- Camera's `yaw = 0` means it's facing Z-Negative (-Z).
+- Increasing the Camera's `yaw` rotates to the right on the Y-Axis.
 
 
 ## HackerOoT
