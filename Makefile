@@ -53,9 +53,9 @@ run: build
 	$(N64_EMULATOR) $(ROM_FILENAME)
 
 clean:
-	rm $(ROM_FILENAME)
 	rm -r $(BUILD_DIR)
 	rm -r $(FILESYSTEM_DIR)
+	rm $(ROM_FILENAME)
 
 # TODO: what is dis???
 -include $(wildcard $(BUILD_DIR)/*.d))
