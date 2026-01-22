@@ -13,10 +13,10 @@ void SetupState_Init(void* state) {
 void SetupState_Main(void* state) {
   rdpq_clear(RGBA16(0, 0, 0, 0));
   rdpq_text_printf(NULL, FONTID_LEXIS, 10.0f, 10.0f,
-                   "Setup Main!\n\nPress START to go\nto dev state");
+                   "Setup Main!\n\nPress START to go\nto play state");
 
   if (joypad_get_buttons_pressed(JOYPAD_DEFAULT_PORT).start) {
-    GameState_Change(GAMESTATE_DEVSTATE);
+    GameState_Change(GAMESTATE_PLAY);
   }
 }
 
