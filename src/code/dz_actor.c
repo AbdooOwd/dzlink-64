@@ -1,14 +1,10 @@
 #include "dz_actor_ovl.h"
+#include "lib/types.h"
 #include "n64sys.h"
 #include <dz_actor.h>
 #include <lib/utils.h>
+#include <states/play_state.h>
 
-void Actor_Init(Actor* actor) {
-  if (actor->init != NULL) {
-    actor->init(actor);
-    actor->init = NULL;
-  }
-}
 
 ActorContext* ActorContext_Init() {
   ActorContext* actorCtx = malloc_uncached(sizeof(ActorContext));
@@ -36,7 +32,7 @@ void ActorContext_Destroy(ActorContext* actorCtx) {
   }
 }
 
-Actor* Actor_Spawn(ActorContext* actorCtx, ActorID actor_id, float pos[3], float rot[3]) {
+Actor* Actor_Spawn(ActorContext* actorCtx, PlayState* play, ActorID actor_id, Vec3 pos, Vec3 rot) {
   ActorOverlay* overlayEntry = &gActorOverlayTable[actor_id];
   ActorProfile* profile = overlayEntry->profile;
 
@@ -67,18 +63,39 @@ Actor* Actor_Spawn(ActorContext* actorCtx, ActorID actor_id, float pos[3], float
   newActor->draw = profile->draw;
   newActor->destroy = profile->destroy;
 
-  Actor_Init(newActor);
+  newActor->home.pos.x = pos.x;
+  newActor->home.pos.y = pos.y;
+  newActor->home.pos.z = pos.z;
+
+  newActor->home.rot.x = rot.x;
+  newActor->home.rot.y = rot.y;
+  newActor->home.rot.z = rot.z;
+
+  // @NOTE: cuz every model's scale on Blender is x10
+  newActor->scale = (Vec3){{0.1f, 0.1f, 0.1f}};
+
+  newActor->world = newActor->home;
+
+  Actor_Init(newActor, play);
 
   return newActor;
 }
 
-void Actor_UpdateAll(ActorContext* actorCtx) {
+
+void Actor_Init(Actor* actor, PlayState* play) {
+  if (actor->init != NULL) {
+    actor->init(actor, play);
+    actor->init = NULL;
+  }
+}
+
+void Actor_UpdateAll(ActorContext* actorCtx, PlayState* play) {
   Actor* actor = actorCtx->actorHead;
 
   while (actor != NULL) {
-    actor->update(actor);
+    actor->update(actor, play);
     // TODO: for now drawing happens here
-    actor->draw(actor);
+    actor->draw(actor, play);
     actor = actor->next;
   }
 }

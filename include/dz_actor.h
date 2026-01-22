@@ -4,15 +4,17 @@
 #include <t3d/t3dmath.h>
 #include <lib/types.h>
 
+struct PlayState;
 struct Actor;
 struct ActorOverlay;
 
-typedef void (*ActorFunc)(struct Actor*);
+typedef void (*ActorFunc)(struct Actor*, struct PlayState*);
 
 typedef struct Actor {
   u16 id; // Actor's type, techincally. usually a value of ActorID enum
   PosRot home; // posrot when actor was spawned
   PosRot world; // current posrot in the world
+  Vec3 scale;
   u16 params;
 
   struct Actor* prev;
@@ -53,10 +55,10 @@ typedef enum ActorID {
 #undef DEFINE_ACTOR
 
 
-void Actor_Init(Actor* actor);
+void Actor_Init(Actor* actor, struct PlayState* play);
 void ActorContext_Destroy(ActorContext* actorCtx);
-Actor* Actor_Spawn(ActorContext* actorCtx, ActorID actor_id, float pos[3], float rot[3]);
+Actor* Actor_Spawn(ActorContext* actorCtx, struct PlayState* play, ActorID actor_id, Vec3 pos, Vec3 rot);
 ActorContext* ActorContext_Init();
-void Actor_UpdateAll(ActorContext* actorCtx);
+void Actor_UpdateAll(ActorContext* actorCtx, struct PlayState* play);
 
 #endif
