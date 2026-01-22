@@ -1,10 +1,8 @@
 #ifndef DEV_STATE_H
 #define DEV_STATE_H
 
-#include "dz_actor.h"
 
 typedef struct DevState {
-  ActorContext* actorCtx;
 } DevState;
 
 
