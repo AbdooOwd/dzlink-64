@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <input.h>
 #include <lib/types.h>
 #include <stdbool.h>
 
@@ -17,11 +18,12 @@ typedef struct GameStateInfo {
 typedef struct GameState {
   bool shouldSwitch;  // true triggers changing states in the main game loop
   u32 frames; // if the constant FPS is 20, it would take ~7 years to overflow (:
+  u8 frameIdx;  // used to draw based on framebuffers count
   bool exit; // if this value is set to true... the game stops...!
   GameStateInfo stateInfo; // kind of like an overlay entry in ZeldaOoT
   u8 stateId; // controls which state the master state should work with
+  Input input;
 } GameState;
-
 
 
 #define DEFINE_GAMESTATE(typeName, enumID) enumID,

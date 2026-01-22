@@ -7,11 +7,15 @@
 #include <graphics.h>
 #include "rdpq.h"
 #include "rdpq_attach.h"
+#include "rdpq_font.h"
+#include "rdpq_text.h"
 #include <n64sys.h>
 #include <game.h>
+#include <debug.h>
 
 #include <states/setup_state.h>
 #include <states/dev_state.h>
+#include <states/play_state.h>
 
 // NOTE: Imagine this being like the super master
 // of game states. This is the pointer that shall
@@ -28,7 +32,7 @@ void Game_Entry() {
 
   // this initializes the master state (duh)
   GameState_InitMaster();
-
+ 
   // loop over the queued states
   while (!gMasterState.exit) {
     gMasterState.stateInfo = GameState_GetInfo(gMasterState.stateId);
@@ -43,6 +47,8 @@ void Game_Entry() {
     while (!gMasterState.shouldSwitch) {
       // @NOTE: looks like a display MUST be attached to the rdp every frame...
       rdpq_attach(display_get(), display_get_zbuf());
+      gMasterState.input = joypad_get_inputs(JOYPAD_DEFAULT_PORT);
+
       GameState_Update(substate);
 
       // @TODO: should these funcs be here?
@@ -74,6 +80,12 @@ void Game_Init() {
   // initialize font
   rdpq_font_t* lexis_font = rdpq_font_load("rom:/lexis.font64");
   rdpq_text_register_font(FONTID_LEXIS, lexis_font);
+  rdpq_text_register_font(FONTID_DBG_MONO, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO));
+  rdpq_text_register_font(FONTID_DBG_VAR, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_VAR));
+}
+
+// @TODO: I think I should separate drawing from updating
+void Game_Draw() {
 
 }
 
@@ -83,6 +95,8 @@ void Game_Destroy() {
   display_close();
 }
 
+
+/* ----- GAMESTATE PART ----- */
 
 /*
  * You could call this func a function called once to prepare
@@ -105,7 +119,11 @@ inline void GameState_InitMaster() {
 }
 
 void GameState_Update(void* state) {
+  gMasterState.frameIdx = gMasterState.frames % FB_COUNT;
+
   gMasterState.stateInfo.main(state);
+
+  gMasterState.frames++;
 }
 
 void GameState_Destroy(void* state) {
@@ -114,6 +132,11 @@ void GameState_Destroy(void* state) {
 
 GameStateInfo GameState_GetInfo(u8 stateId) {
   GameStateInfo stateInfo;
+
+  // @NOTE: This func's approach probably adds more
+  //  CPU instructions and such, but it happens when
+  //  loading a new state, which I don't think will
+  //  happen so often
 
   #define DEFINE_GAMESTATE(typeName, enumId)    \
     case enumId:                                \
@@ -127,7 +150,7 @@ GameStateInfo GameState_GetInfo(u8 stateId) {
   switch (stateId) {
     #include <tables/gamestate_table.h>
     default:
-      assertf(true, "Unknown state ID: %i", stateId);
+      assertf(false, "Unknown state ID: %i", stateId);
   }
 
   #undef DEFINE_GAMESTATE
