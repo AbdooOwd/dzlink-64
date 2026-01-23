@@ -5,4 +5,4 @@
  *    - actor's ID name a.k.a enum value [ACTOR_EXAMPLE]
 */
 
-DEFINE_ACTOR(ObjN64Logo, obj_n64_logo, ACTOR_OBJ_N64LOGO)
+/* 0x0000 */  DEFINE_ACTOR(ObjN64Logo, obj_n64_logo, ACTOR_OBJ_N64LOGO)
