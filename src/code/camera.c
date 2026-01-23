@@ -14,7 +14,6 @@ void Camera_Spawn(Camera* camera, Vec3 pos, binang yaw, binang pitch, Vec3 at, b
 
   t3d_viewport_set_projection(&camera->viewport, fov, CAMERA_DEFAULT_NEAR, CAMERA_DEFAULT_FAR);
 
-  Camera_SetFOV(camera, camera->fov);
   Camera_Rotate(camera, yaw, pitch);
   Camera_LookAt(camera, &camera->at);
   Camera_Attach(camera);
