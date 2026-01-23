@@ -296,3 +296,6 @@ contains some pretty interesting stuff for N64 & average devs (i think).
 - Imagine fighting your camera's code because your view or actors are appearing
   all squished, until you realize your emulator was in 16:9 ... Welp.
   Just had to set it back to 4:3 !
+
+- The codename of this project has been `DZLink`. But I think I'll also refer to it
+  as `DZLink64`. Oh, and it can be referred to as a game, and maybe more an engine.
