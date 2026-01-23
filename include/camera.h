@@ -28,14 +28,14 @@ void Camera_Attach(Camera* camera);
 void Camera_SetFOV(Camera* camera, binang newFov);
 float Camera_GetAspectRatio(Camera* camera);
 
-void Camera_Translate(Camera* camera, Vec3 towards);
-void Camera_TranslateFree(Camera* camera, Vec3 towards);
+void Camera_Translate(Camera* camera, Vec3* towards);
+void Camera_TranslateFree(Camera* camera, Vec3* towards);
 
 void Camera_RotateYaw(Camera* camera, binang yaw);
 void Camera_RotatePitch(Camera* camera, binang pitch);
 void Camera_Rotate(Camera* camera, binang yaw, binang pitch);
 
-void Camera_SetPos(Camera* camera, Vec3 pos);
+void Camera_SetPos(Camera* camera, Vec3* pos);
 void Camera_SetYaw(Camera* camera, binang yaw);
 void Camera_SetPitch(Camera* camera, binang pitch);
 void Camera_SetRotation(Camera* camera, binang yaw, binang pitch);

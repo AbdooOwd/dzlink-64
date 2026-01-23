@@ -24,16 +24,16 @@ void Camera_LookAt(Camera* camera, Vec3* at) {
   t3d_viewport_look_at(&camera->viewport, &camera->pos, &camera->at, &camera->up);
 }
 
-void Camera_Translate(Camera* camera, Vec3 towards) {
-  t3d_vec3_add(&camera->pos, &camera->pos, &towards);
+void Camera_Translate(Camera* camera, Vec3* towards) {
+  t3d_vec3_add(&camera->pos, &camera->pos, towards);
   Camera_LookAt(camera, &camera->at);
 }
 
 /*
  * Translates camera position and its `at`
  * */
-void Camera_TranslateFree(Camera* camera, Vec3 towards) {
-  t3d_vec3_add(&camera->at, &camera->at, &towards);
+void Camera_TranslateFree(Camera* camera, Vec3* towards) {
+  t3d_vec3_add(&camera->at, &camera->at, towards);
   Camera_Translate(camera, towards);
 }
 
@@ -80,8 +80,8 @@ void Camera_SetRotation(Camera* camera, binang yaw, binang pitch) {
   Camera_LookAt(camera, &camera->at);
 }
 
-void Camera_SetPos(Camera* camera, Vec3 pos) {
-  camera->pos = pos;
+void Camera_SetPos(Camera* camera, Vec3* pos) {
+  camera->pos = *pos;
   Camera_LookAt(camera, &camera->at);
 }
 
