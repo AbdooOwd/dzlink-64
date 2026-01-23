@@ -12,7 +12,3 @@ to handle 3D stuff (I still don't quite understand all of that yet).
 The [`Makefile`](./Makefile) is the file that is used to manipulate
 the project (build, clean, run...) using [`make`](https://www.gnu.org/software/make/)
 (see it as... build automation? like a bash script but better).
-
-## A few credits
-
-- The [Lexis Font](https://codeberg.org/Dmian/font-lexis/src/branch/main)

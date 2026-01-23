@@ -78,8 +78,6 @@ void Game_Init() {
   joypad_init();
 
   // initialize font
-  rdpq_font_t* lexis_font = rdpq_font_load("rom:/lexis.font64");
-  rdpq_text_register_font(FONTID_LEXIS, lexis_font);
   rdpq_text_register_font(FONTID_DBG_MONO, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO));
   rdpq_text_register_font(FONTID_DBG_VAR, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_VAR));
 }
