@@ -12,7 +12,7 @@ void Camera_Spawn(Camera* camera, Vec3 pos, binang yaw, binang pitch, Vec3 at, b
   camera->up = CAMERA_DEFAULT_UP;
   camera->fov = fov;
 
-  t3d_viewport_set_projection(&camera->viewport, fov, CAMERA_DEFAULT_NEAR, CAMERA_DEFAULT_FAR);
+  t3d_viewport_set_projection(&camera->viewport, BINANG_TO_RAD(fov), CAMERA_DEFAULT_NEAR, CAMERA_DEFAULT_FAR);
 
   Camera_Rotate(camera, yaw, pitch);
   Camera_LookAt(camera, &camera->at);
@@ -90,7 +90,7 @@ void Camera_Attach(Camera* camera) {
 }
 
 /*
- * Changes camera's FOV to `newFov` which should be in radians.
+ * Changes camera's FOV to `newFov` which should be in binangs.
  * This should be and probably MUST be the only way
  * used to change the camera's FOV, as the `fov`
  * value in the Camera struct is just to keep track
