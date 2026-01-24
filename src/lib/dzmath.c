@@ -13,7 +13,7 @@
 float dz_cos(binang angle) {
   bool flipsign = ((angle ^ (angle << 1)) & 0x8000) != 0;
   if (flipsign)
-      angle = 0x8000 - angle;
+      angle = Q15_PI - angle;
 
   s32 xx = angle * angle;
   s64 xx4 = xx << 2; // times 4
