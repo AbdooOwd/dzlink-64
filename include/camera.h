@@ -7,6 +7,8 @@
 #define CAMERA_DEFAULT_NEAR 5
 #define CAMERA_DEFAULT_FAR  80
 #define CAMERA_DEFAULT_UP (Vec3){{0, 1, 0}}
+#define CAMERA_MAX_PITCH   0x3FFF
+#define CAMERA_MIN_PITCH  -0x3FFF
 
 // some pre-computed values
 #define CAMERA_DEFAULT_FOV  0x2AAB  // 60° in BINANG

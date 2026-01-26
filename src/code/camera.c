@@ -60,6 +60,13 @@ void Camera_Rotate(Camera* camera, binang yaw, binang pitch) {
   camera->yaw += yaw;
   camera->pitch += pitch;
 
+  // @TODO: is running this condition every call ok?
+  //  (well, definitely cuz we don't want the cam going crazy)
+  if (camera->pitch > CAMERA_MAX_PITCH)
+    camera->pitch = CAMERA_MAX_PITCH;
+  if (camera->pitch < CAMERA_MIN_PITCH)
+    camera->pitch = CAMERA_MIN_PITCH;
+
   Camera_SetRotation(camera, camera->yaw, camera->pitch);
 }
 
