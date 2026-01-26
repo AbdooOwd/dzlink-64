@@ -120,6 +120,7 @@ void GameState_Update(void* state) {
   gMasterState.frameIdx = gMasterState.frames % FB_COUNT;
 
   gMasterState.stateInfo.main(state);
+  rdpq_text_printf(NULL, FONTID_DBG_VAR, 10.0f, 10.0f, "FPS: %.02f", display_get_fps());
 
   gMasterState.frames++;
 }
