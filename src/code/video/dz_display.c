@@ -1,33 +1,55 @@
 #include <graphics.h>
-#include "interrupt.h"
-#include "rdpq_attach.h"
+#include <lib/utils.h>
 #include <globals.h>
 #include <video/dz_display.h>
 
-bool gWidescreenEnabled = false;
-
-
-void display_switch_widescreen() {
-  display_set_widescreen(!gWidescreenEnabled);
+inline void display_switch_widescreen(u8* displaySettings) {
+  *displaySettings ^= DISPLAY_BITMASK_WIDESCREEN;
 }
 
-void display_set_widescreen(bool enableWidescreen) {
+inline void display_set_widescreen(u8* displaySettings, bool enableWidescreen) {
+  BIT_SET_BOOL(*displaySettings, enableWidescreen, DISPLAY_BITMASK_WIDESCREEN);
+}
+
+inline bool display_widescreen_enabled(u8* displaySettings) {
+  return (*displaySettings & DISPLAY_BITMASK_WIDESCREEN) != 0;
+}
+
+
+inline void display_switch_antialiasing(u8* displaySettings) {
+  *displaySettings ^= DISPLAY_BITMASK_ANTIALIAS;
+}
+
+inline void display_set_antialiasing(u8* displaySettings, bool enableAA) {
+  BIT_SET_BOOL(*displaySettings, enableAA, DISPLAY_BITMASK_ANTIALIAS);
+}
+
+inline bool display_antialiasing_enabled(u8* displaySettings) {
+  return (*displaySettings & DISPLAY_BITMASK_ANTIALIAS) != 0;
+}
+
+
+void display_update_settings(u8* displaySettings) {
   // Disable interrupts cuz if this func is interrupted
   // the screen & rdp stuff break
   disable_interrupts();
 
   u16 new_width;
+  filter_options_t new_filter;
 
-  gWidescreenEnabled = enableWidescreen;
-
-  if (gWidescreenEnabled)
+  if (display_widescreen_enabled(displaySettings))
     new_width = DISPLAY_WIDESCREEN_WIDTH;
   else
     new_width = DISPLAY_DEFAULT_WIDTH;
 
+  if (display_antialiasing_enabled(displaySettings))
+    new_filter = FILTERS_RESAMPLE_ANTIALIAS;
+  else
+    new_filter = FILTERS_RESAMPLE;
+
   // @TODO: is this much function calls ok?
-  //  I mean, it's not like we're switching widescreen
-  //  every frame, but still.
+  //  I mean, it's not like we're updating the display
+  //  setting every frame (and should NEVER be the case), but still.
   rdpq_detach();
   display_close();
   display_init(
@@ -39,13 +61,9 @@ void display_set_widescreen(bool enableWidescreen) {
     DEPTH_16_BPP,
     FB_COUNT,
     GAMMA_NONE,
-    FILTERS_RESAMPLE
+    new_filter
   );
   rdpq_attach(display_get(), display_get_zbuf());
 
   enable_interrupts();
-}
-
-inline bool display_widescreen_enabled() {
-  return gWidescreenEnabled;
 }

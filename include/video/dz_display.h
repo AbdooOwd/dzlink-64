@@ -7,7 +7,18 @@
 #define DISPLAY_DEFAULT_WIDTH     320
 #define DISPLAY_DEFAULT_HEIGHT    240
 
-void display_switch_widescreen();
-void display_set_widescreen(bool enableWidescreen);
+// settings masks
+#define DISPLAY_BITMASK_WIDESCREEN  (1 << 0)
+#define DISPLAY_BITMASK_ANTIALIAS   (1 << 1)
+
+void display_switch_widescreen(u8* displaySettings);
+void display_set_widescreen(u8* displaySettings, bool enableWidescreen);
+bool display_widescreen_enabled(u8* displaySettings);
+
+void display_switch_antialiasing(u8* displaySettings);
+void display_set_antialiasing(u8* displaySettings, bool enableAA);
+bool display_antialiasing_enabled(u8* displaySettings);
+
+void display_update_settings(u8* new_settings);
 
 #endif

@@ -23,6 +23,7 @@ typedef struct GameState {
   GameStateInfo stateInfo; // kind of like an overlay entry in ZeldaOoT
   u8 stateId; // controls which state the master state should work with
   Input input;
+  u8 displaySettings;
 } GameState;
 
 
