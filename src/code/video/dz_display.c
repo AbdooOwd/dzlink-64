@@ -1,3 +1,4 @@
+#include "t3d/t3d.h"
 #include <graphics.h>
 #include <lib/utils.h>
 #include <globals.h>
@@ -29,15 +30,16 @@ inline bool display_antialiasing_enabled(u8* displaySettings) {
 }
 
 
-void display_update_settings(u8* displaySettings) {
+void display_update_settings(u8* displaySettings, Camera* camera) {
   // Disable interrupts cuz if this func is interrupted
   // the screen & rdp stuff break
   disable_interrupts();
 
+  bool widescreenEnabled = display_widescreen_enabled(displaySettings);
   u16 new_width;
   filter_options_t new_filter;
 
-  if (display_widescreen_enabled(displaySettings))
+  if (widescreenEnabled)
     new_width = DISPLAY_WIDESCREEN_WIDTH;
   else
     new_width = DISPLAY_DEFAULT_WIDTH;
@@ -64,6 +66,17 @@ void display_update_settings(u8* displaySettings) {
     new_filter
   );
   rdpq_attach(display_get(), display_get_zbuf());
+
+  if (camera != NULL) {
+    float aspectRatio;
+    if (widescreenEnabled)
+      aspectRatio = 16.0f/9.0f;
+    else
+      aspectRatio = 4.0f/3.0f;
+    t3d_viewport_set_area(&camera->viewport, 0, 0, new_width, DISPLAY_DEFAULT_HEIGHT);
+    Camera_SetAspectRatio(camera, aspectRatio);
+    // Camera_Attach(camera);
+  }
 
   enable_interrupts();
 }

@@ -1,6 +1,7 @@
 #ifndef DZ_DISPLAY_H
 #define DZ_DISPLAY_H
 
+#include <camera.h>
 #include <lib/types.h>
 
 #define DISPLAY_WIDESCREEN_WIDTH  428
@@ -19,6 +20,6 @@ void display_switch_antialiasing(u8* displaySettings);
 void display_set_antialiasing(u8* displaySettings, bool enableAA);
 bool display_antialiasing_enabled(u8* displaySettings);
 
-void display_update_settings(u8* new_settings);
+void display_update_settings(u8* displaySettings, Camera* camera);
 
 #endif

@@ -28,6 +28,7 @@ void Camera_Spawn(Camera* camera, Vec3 pos, binang yaw, binang pitch, Vec3 at, b
 void Camera_LookAt(Camera* camera, Vec3* at);
 void Camera_Attach(Camera* camera);
 void Camera_SetFOV(Camera* camera, binang newFov);
+void Camera_SetAspectRatio(Camera* camera, float aspectRatio);
 float Camera_GetAspectRatio(Camera* camera);
 
 void Camera_Translate(Camera* camera, Vec3* towards);

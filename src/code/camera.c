@@ -1,9 +1,11 @@
 #include <globals.h>
 #include <lib/utils.h>
 #include <lib/dzmath.h>
+#include <camera.h>
+
 #include "t3d/t3d.h"
 #include "t3d/t3dmath.h"
-#include <camera.h>
+
 
 void Camera_Spawn(Camera* camera, Vec3 pos, binang yaw, binang pitch, Vec3 at, binang fov) {
   camera->viewport = t3d_viewport_create_buffered(FB_COUNT);
@@ -114,6 +116,10 @@ void Camera_SetFOV(Camera* camera, binang newFov) {
   camera->viewport.matProj.m[1][1] = 1.0f / tanHalfFov;
 
   camera->fov = newFov;
+}
+
+void Camera_SetAspectRatio(Camera* camera, float aspectRatio) {
+  t3d_viewport_set_perspective(&camera->viewport, BINANG_TO_RAD(camera->fov), aspectRatio, CAMERA_DEFAULT_NEAR, CAMERA_DEFAULT_FAR);
 }
 
 float Camera_GetAspectRatio(Camera* camera) {
