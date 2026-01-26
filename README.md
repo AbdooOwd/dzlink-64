@@ -3,15 +3,11 @@
 This is my first attempt at making a 3D game for the Nintendo 64 using
 [libdragon](https://libdragon.dev/) and [Tiny3D](https://github.com/HailToDodongo/Tiny3D).
 
-## How to build
+## Table of Contents
 
-You'll require [libdragon](https://libdragon.dev/) for an N64 library/interface
-and [Tiny3D](https://github.com/HailToDodongo/Tiny3D) for a nice microcode
-to handle 3D stuff (I still don't quite understand all of that yet).
+* [Usage Condition (important!!!)](#️-usage-conditions)
+* [How to Build](#how-to-build)
 
-The [`Makefile`](./Makefile) is the file that is used to manipulate
-the project (build, clean, run...) using [`make`](https://www.gnu.org/software/make/)
-(see it as... build automation? like a bash script but better).
 
 ## ☪️ Usage Conditions
 
@@ -53,3 +49,25 @@ and the knowledge it leads to.
 
 > *"Whoever guides someone to goodness will have a reward like the one who did it."*
 > <br/> – Prophet Muhammad (peace be upon him)
+
+
+## How to build
+
+You'll require [libdragon](https://libdragon.dev/) for an N64 library/interface
+and [Tiny3D](https://github.com/HailToDodongo/Tiny3D) for a nice microcode
+to handle 3D stuff (I still don't quite understand all of that yet).
+
+The [`Makefile`](./Makefile) is the file that is used to manipulate
+the project (build, clean, run...) using [`make`](https://www.gnu.org/software/make/)
+(see it as... build automation? like a bash script but better).
+
+After acquiring `libdragon` and `tiny3d`, run `make` to build the project.
+
+## How to Run
+
+`libdragon` aims to make ROMs for real hardware. So running the produced
+ROM of this project in any emulator will likely not work.
+It will, though, work on `ares` as this is the one I use to work
+on this project.
+You could also try [Gopher64](https://github.com/gopher64/gopher64),
+but I haven't tried it.

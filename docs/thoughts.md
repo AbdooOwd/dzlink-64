@@ -468,3 +468,98 @@ contains some pretty interesting stuff for N64 & average devs (i think).
   And I think that's it for my trigonometry functions. I am very proud
   and thankful to God that they are working correctly.
   And I had a lot of fun learning everything that revolves around them.
+
+- My next task is learning how to move things relatively to the camera.
+  Example: if the camera is facing -Z (as by default), I can see the objects
+  moving with the stick's input move. But if I rotate the camera,
+  the objects move relatively to the world space who's rotation is 0 on all axis!
+  Thus, I must learn how to do that kinda thing to be able to control a player
+  actor correctly.
+
+- I'm kind of too tired to explain the following code, but all you gotta know
+  is that it lets the camera move relatively to its rotation (this code can also
+  be used to move actors relatively to the cam's rotation):
+  ```c
+  Camera_TranslateFree(&this->camera, &VEC3(
+    (dz_cos(camYaw) * input->stick_x + dz_sin(camYaw) * input->stick_y) * 0.01f,
+    0,
+    (-dz_cos(camYaw) * input->stick_y + dz_sin(camYaw) * input->stick_x) * 0.01f
+  ));
+  ```
+
+- I have added wide-screen & anti-aliasing support (well, it was already available
+  but I know have some functions to do it in-game, not only at initialization).
+  The thing is that every time I use one of those functions, there are values
+  that will be reset. For example, when using the wide-screen set function,
+  the resolution's width becomes `428` if ON, or `320` if OFF, and the filter
+  is set to `FILTER_RESAMPLE`.
+  The issue, though, is that when using the anti-aliasing set function,
+  I gotta check back what the display's resolution was before re-initializing
+  the display in order to enable/disable anti-aliasing.
+  And then the same issue comes in the wide-screen function, because I must set
+  the display's filter to what it was before re-initializing (re-sample filter
+  or anti-aliasing re-sample?).
+
+  **SO;** my idea: some display information will be stored in a `u16` as bits.
+  And that `u16` will store the width in the 10 first bits (because the maximum
+  allowed width is `800` or `1100100000`). Then the 6 remaining bits will
+  be used to store the `true`/`false` settings of the display.
+
+  **OR;** I could also <u>not</u> store the width and just store if wide-screen
+  is enabled using a bit in that `u16` that would probably now be a `u8`
+  for how little information we need about the display (all I can think of for now
+  is wide-screen & anti-aliasing).
+
+  Thus, using one of the methods I suggested, we could write a function
+  `display_update_settings` or something like that, and it would either take
+  a `u8` that would contain the display's settings, or just make a global
+  variable to hold these settings (I think I'll stick to the first option).
+  With how my current display functions are implemented, we'll re-initialize
+  the display & RDP in any case. So why not just have one unified function
+  to enable/disable display settings based on that `u8`.
+  - I think I'll store that `u8` in the `GameState` struct, as it is only
+    used by the master-state who justs technically, like,
+    ***controls the whole game*** so.
+  - Wait actually where should those settings be stored? I don't mean stored
+    like saved before quitting the game--I mean while the game is running,
+    and from code's perspective. Should it be stored as a global variable
+    or in the `GameState` struct?
+  - I have made a pretty much "ok" work with the display functions.
+    I still need to be sure of some things but it won't be that difficult, I think.
+
+- I have discovered that I could achieve "wide-screen" with another function that only
+  takes ~20-30µs! Using the function `t3d_viewport_set_perspective`, I can make
+  the camera's viewport display in "wide-screen" by giving `16.0f/9.0f` (16:9 ratio)
+  as aspect ratio argument for the function. That's 1000 times faster than my display
+  function which took around ~21ms to do display in wide-screen! And it even fixed an issue
+  I had with the wide-screen mode that made the camera not recognize what was outside
+  of view and what wasn't, thus any mesh's triangle would vanish if it was at the right
+  of the viewport.
+  The downside to using that function instead is that only what the camera sees is in
+  "wide-screen". Text n' all 2D stuff still appears squished because of my forced aspect ratio
+  for <u>the camera</u>. My display's wide-screen function re-initializes the whole display
+  in order to have EVERYTHING appear correctly in wide-screen mode.
+  I should look into that & ask on the Discord server...
+
+  - Apparently, based on a pretty wise guy on the N64Brew Discord server, my approach
+    of reinitializing the display is pretty nice and ok. Because 21ms isn't that important
+    for switching to a better resolution (which <u>could</u> lead to slightly reduced performance).
+    So I guess I'll stick to my functions and try fixing them.
+
+- Something I have to fix about my display functions is that meshes' triangles start vanishing
+  or rather stop rendering when they're close to the right of the viewport (right of the screen, rather).
+  In order to fix that, I had used `t3d_viewport_set_area` which fixed the issue, but then ANOTHER
+  problem rose: the 2D stuff are ok (not stretched anymore), but my 3D view remains unchanged. I swear
+  it felt like the effects of doing `+1-1=0`. I should look into that...
+  - After some kind help from another wise guy on the N64Brew Discord server, I realized that I was
+    very stupid for trying to use `t3d_viewport_set_perspective` alone, then tried
+    `t3d_viewport_set_area` alone. They both helped a bit but didn't fix my issue entirely or didn't give
+    me the results I wanted. **TURNS OUT** I had to use them *both*, then attach my viewport whose
+    aspect ratio & area size changed. Re-attaching wasn't necessary because we're editing
+    the viewport that the game is already working with--we're not generating/initializing a new one
+    (it's embedded to my Camera's struct).
+
+    So now I got a working "wide-screen" mode that can be turned ON & OFF by using the
+    `display_set_widescreen` which takes a `u8*` for display settings and a Camera pointer
+    in order to edit its viewport's aspect ratio & area size.
+    I think it's a pretty nice implementation.
