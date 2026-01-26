@@ -1,7 +1,7 @@
 #ifndef PLAY_STATE_H
 #define PLAY_STATE_H
 
-#include "dz_actor.h"
+#include <dz_actor.h>
 #include <camera.h>
 
 typedef struct PlayState {
