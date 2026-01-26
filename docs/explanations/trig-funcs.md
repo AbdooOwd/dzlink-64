@@ -75,7 +75,7 @@ at [My Thoughts' Document](../thoughts.md).
     a.k.a on the right of the 90° line), and Quadrants 2 & 4 are negative.
     I'm too lazy & stupid to explain in text like this so here is something I drew:
 
-    <img src="./imgs/magic_quadrant_detection.png" />
+    <img src="../imgs/magic_quadrant_detection.png" />
 
     This image represents the 2 highest bits of any BINANG for each Quadrant
     (as noted above). After bit-shifting to the left (multiplying by 2),
@@ -116,7 +116,7 @@ at [My Thoughts' Document](../thoughts.md).
 - Now, I have to explain how things are done:
   using this code snippet from Kaze Emanuar:
 
-  <img src="./imgs/kaze_bhaskaraCos.png" />
+  <img src="../imgs/kaze_bhaskaraCos.png" />
 
   We have little background about what's happening in this code-snippet,
   but there are things you can understand with my previous thoughts-entries.
@@ -143,7 +143,7 @@ at [My Thoughts' Document](../thoughts.md).
   value would make no sense. Here is a graph that compares the normal cosine function
   used almost everywhere in red with Bhaskara's approximation in blue:
 
-  <img src="./imgs/bhaskaraCos_graph.png" />
+  <img src="../imgs/bhaskaraCos_graph.png" />
 
   As you can see, Bhasara's Cos approximation is EXACT as long as x is between
   `-pi/2` and `pi/2` (we're using radians). But any other value would result in,
@@ -164,7 +164,7 @@ at [My Thoughts' Document](../thoughts.md).
     offseted to replicated the original cos graph which is
     the dotted graph in blue.
 
-  <img src="./imgs/fullCosBhaskara.png" />
+  <img src="../imgs/fullCosBhaskara.png" />
 
   So, if `x` is of [pi/2;3pi/2] or [-pi/2;-3pi/2] (both mean the left part
   of the circle, or the red area in Figure TC-1), we just plug `x + (half circle)`
@@ -181,7 +181,7 @@ at [My Thoughts' Document](../thoughts.md).
     The white ones mean rotating positively (positive angle).
     The angles start rotating from (1, 0) on the circle's grid.
 
-  <img src="./imgs/trigcircle.svg" width=65% />
+  <img src="../imgs/trigcircle.svg" width=65% />
 
   > Figure TC-1
 
@@ -192,7 +192,7 @@ at [My Thoughts' Document](../thoughts.md).
   on that circle's grid would be `cos(angle)` and Y (vertical) position
   would be `sin(angle)`.
 
-  <img src="./imgs/trigcircle_mirror.svg" width=65% />
+  <img src="../imgs/trigcircle_mirror.svg" width=65% />
 
   > Figure TC-2
 
@@ -247,7 +247,7 @@ at [My Thoughts' Document](../thoughts.md).
         Sine's graph (in red) and Cosine's graph (in blue) are identical!
         The only difference is their X position on the grid:
 
-        <img src="./imgs/cos_and_sin.png" />
+        <img src="../imgs/cos_and_sin.png" />
 
         > Figure TC-3
 
