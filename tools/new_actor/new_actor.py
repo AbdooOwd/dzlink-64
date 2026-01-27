@@ -1,7 +1,7 @@
 """New Actor Script for DZLink64 Engine"""
 
 import argparse
-from os import error, path, mkdir
+from os import path, mkdir
 from pathlib import Path
 import re
 
@@ -15,8 +15,10 @@ def convertActorNames(name: str):
     actorFilename = "dz"
     actorEnumID = ""
 
-    for (i, part) in enumerate(name.split("_")):
-        if i == 0:
+    split_name = name.split("_")
+
+    for (i, part) in enumerate(split_name):
+        if (i == 0) and (len(split_name) > 1):
             actorFolderName += part.capitalize() + "_"
         else:
             actorFolderName += part.capitalize()
