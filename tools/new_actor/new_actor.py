@@ -25,7 +25,7 @@ def convertActorNames(name: str):
         actorName += part.capitalize()
         actorFilename += "_" + part.lower()
 
-    actorEnumID = "ACTOR_" + actorFolderName.upper()
+    actorEnumID = "ACTOR_" + actorFolderName.replace("ovl_", "").upper()
 
     return dict(
         actorName = actorName,
