@@ -1,3 +1,4 @@
+#include "t3d/t3dmath.h"
 #include <lib/dzmath.h>
 #include <math.h>
 
@@ -34,4 +35,27 @@ float dz_tan(binang angle) {
   float tan = (dz_sin(angle)) / c;
 
   return tan;
+}
+
+void dz_mat4_from_srt_euler(T3DMat4 *mat, const float scale[3], const binang rot[3], const float translate[3]) {
+  float cosR0 = dz_cos(rot[0]);
+  float cosR2 = dz_cos(rot[2]);
+  float cosR1 = dz_cos(rot[1]);
+
+  float sinR0 = dz_sin(rot[0]);
+  float sinR1 = dz_sin(rot[1]);
+  float sinR2 = dz_sin(rot[2]);
+
+  *mat = (T3DMat4){{
+    {scale[0] * cosR2 * cosR1, scale[0] * (cosR2 * sinR1 * sinR0 - sinR2 * cosR0), scale[0] * (cosR2 * sinR1 * cosR0 + sinR2 * sinR0), 0.0f},
+    {scale[1] * sinR2 * cosR1, scale[1] * (sinR2 * sinR1 * sinR0 + cosR2 * cosR0), scale[1] * (sinR2 * sinR1 * cosR0 - cosR2 * sinR0), 0.0f},
+    {-scale[2] * sinR1, scale[2] * cosR1 * sinR0, scale[2] * cosR1 * cosR0, 0.0f},
+    {translate[0], translate[1], translate[2], 1.0f}
+  }};
+}
+
+void dz_mat4fp_from_srt_euler(T3DMat4FP* mat, const float scale[3], const binang rot[3], const float translate[3]) {
+  T3DMat4 mat4;
+  dz_mat4_from_srt_euler(&mat4, scale, rot, translate);
+  t3d_mat4_to_fixed_3x4(mat, &mat4);
 }

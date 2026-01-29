@@ -57,7 +57,7 @@ typedef enum ActorID {
 
 void Actor_Init(Actor* actor, struct PlayState* play);
 void ActorContext_Destroy(ActorContext* actorCtx);
-Actor* Actor_Spawn(ActorContext* actorCtx, struct PlayState* play, ActorID actor_id, Vec3 pos, Vec3 rot);
+Actor* Actor_Spawn(ActorContext* actorCtx, struct PlayState* play, ActorID actor_id, Vec3 pos, VecGeo rot);
 ActorContext* ActorContext_Init();
 void Actor_UpdateAll(ActorContext* actorCtx, struct PlayState* play);
 

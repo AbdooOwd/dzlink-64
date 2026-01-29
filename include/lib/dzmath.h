@@ -14,6 +14,7 @@
 
 
 #define VEC3_ZERO (Vec3){{0, 0, 0}}
+#define VECGEO_ZERO (VecGeo){{0, 0, 0}}
 #define VEC3(x, y, z) (Vec3){{x, y, z}}
 
 
@@ -31,9 +32,11 @@
 #define BINANG_TO_DEG(binangle) ((binangle) / BINANG_PER_DEG)
 #define BINANG_TO_RAD(binangle) ((binangle) / BINANG_PER_RAD)
 
-
 float dz_cos(binang angle);
 float dz_sin(binang angle);
 float dz_tan(binang angle);
+
+void dz_mat4_from_srt_euler(T3DMat4 *mat, const float scale[3], const binang rot[3], const float translate[3]);
+void dz_mat4fp_from_srt_euler(T3DMat4FP* mat, const float scale[3], const binang rot[3], const float translate[3]);
 
 #endif

@@ -17,10 +17,16 @@ typedef int64_t   s64;
 typedef s16       binang;
 
 typedef T3DVec3   Vec3;
+typedef union {
+  struct {
+    binang yaw, pitch, roll;
+  };
+  binang v[3];
+} VecGeo;
 
 typedef struct PosRot {
   Vec3 pos;
-  Vec3 rot;
+  VecGeo rot;
 } PosRot;
 
 #endif
